@@ -4,6 +4,8 @@
 #include <GLUT/GLUT.h>  /* Для Mac OS */
 #endif
 
+#include <OpenGL/gl.h>
+
 void reshape(int w, int h)
 {
     glViewport(0, 0, w, h);
