@@ -1,37 +1,27 @@
 #include <stdio.h>
 #include <jpeglib.h>
 #include <memory>
+#include <vertel/image.h>
 
-// class for save & load image
-class Image
+namespace Vertel
 {
-public:
-    // ширина и высота
-    int width;
-    int height;
-
-    // глубина цвета
-    int depth;
-
-    // битовая карта изображения
-    int *bitMap;
-
-    // original file
-    char* fileName;
-
-    Image() {
+    Image::Image()
+    {
         // do something ...
     }
 
-    Image(const char* fileName) {
+    Image::Image(const char *fileName)
+    {
         this->loadJpeg(fileName);
     }
 
-    int loadJpeg(const char* fileName) {
-        return this->loadJpeg((char*) fileName);
+    int Image::loadJpeg(const char *fileName)
+    {
+        return this->loadJpeg((char *) fileName);
     }
 
-    int loadJpeg(char* fileName) {
+    int Image::loadJpeg(char *fileName)
+    {
         this->fileName = fileName;
 
         unsigned char a, r, g, b;
@@ -39,7 +29,7 @@ public:
         struct jpeg_decompress_struct cinfo;
         struct jpeg_error_mgr jerr;
 
-        FILE * infile;        /* source file */
+        FILE *infile;        /* source file */
         JSAMPARRAY pJpegBuffer;       /* Output row buffer */
         int row_stride;       /* physical row width in output buffer */
 
@@ -58,8 +48,8 @@ public:
         this->width = cinfo.output_width;
         this->height = cinfo.output_height;
 
-        unsigned char * pDummy = new unsigned char [this->width * this->height * 4];
-        unsigned char * pTest = pDummy;
+        unsigned char *pDummy = new unsigned char[this->width * this->height * 4];
+        unsigned char *pTest = pDummy;
 
         if (!pDummy) {
             printf("NO MEM FOR JPEG CONVERT!\n");
@@ -67,7 +57,7 @@ public:
         }
 
         row_stride = this->width * cinfo.output_components;
-        pJpegBuffer = (*cinfo.mem->alloc_sarray) ((j_common_ptr) &cinfo, JPOOL_IMAGE, row_stride, 1);
+        pJpegBuffer = (*cinfo.mem->alloc_sarray)((j_common_ptr) &cinfo, JPOOL_IMAGE, row_stride, 1);
 
         while (cinfo.output_scanline < cinfo.output_height) {
             (void) jpeg_read_scanlines(&cinfo, pJpegBuffer, 1);
@@ -95,34 +85,37 @@ public:
         (void) jpeg_finish_decompress(&cinfo);
         jpeg_destroy_decompress(&cinfo);
 
-        this->bitMap = (int*) pTest;
+        this->bitMap = (int *) pTest;
         this->depth = 32;
 
         return 0;
     }
 
-    int saveJpeg(const char* fileName) {
-        return this->saveJpeg((char*) fileName);
+    int Image::saveJpeg(const char *fileName)
+    {
+        return this->saveJpeg((char *) fileName);
     }
 
-    int saveJpeg(char* fileName) {
+    int Image::saveJpeg(char *fileName)
+    {
         return this->saveJpegBitmap(fileName, this->bitMap, this->width, this->height);
     }
 
-    int saveJpegBitmap(const char* fileName, int* bitMap, int width, int height) {
-        return saveJpegBitmap((char*) fileName, bitMap, width, height);
+    int Image::saveJpegBitmap(const char *fileName, int *bitMap, int width, int height) {
+        return saveJpegBitmap((char *) fileName, bitMap, width, height);
     }
 
-    int saveJpegBitmap(char* fileName, int* bitMap, int width, int height) {
+    int Image::saveJpegBitmap(char *fileName, int *bitMap, int width, int height)
+    {
         struct jpeg_compress_struct cinfo;
         struct jpeg_error_mgr jerr;
 
         /* this is a pointer to one row of image data */
         JSAMPROW rowPointer[1];
-        FILE* outFile = fopen(fileName, "wb");
+        FILE *outFile = fopen(fileName, "wb");
 
         if (!outFile) {
-            printf("Error opening output jpeg file %s\n!", fileName );
+            printf("Error opening output jpeg file %s\n!", fileName);
             return -1;
         }
 
@@ -143,8 +136,9 @@ public:
         jpeg_start_compress(&cinfo, TRUE);
 
         /* like reading a file, this time write one row at a time */
-        while(cinfo.next_scanline < cinfo.image_height) {
-            unsigned char* imageRow = (unsigned char*) malloc(cinfo.image_width * sizeof(char) * cinfo.input_components);
+        while (cinfo.next_scanline < cinfo.image_height) {
+            unsigned char *imageRow = (unsigned char *) malloc(
+                    cinfo.image_width * sizeof(char) * cinfo.input_components);
 
             for (int j = 0; j < cinfo.image_width; ++j) {
                 int pixel = bitMap[cinfo.next_scanline * cinfo.image_width + j];
@@ -164,4 +158,4 @@ public:
 
         return 0;
     }
-};
+}

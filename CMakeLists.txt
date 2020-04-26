@@ -4,9 +4,9 @@ set(CMAKE_CXX_STANDARD 17)
 
 project(vertel)
 
-#include_directories(
-#    include
-#)
+include_directories(
+    include
+)
 
 set(VERTEL_SHARED_SOURCES
     src/image.cpp

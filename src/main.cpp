@@ -5,7 +5,10 @@
 #endif
 
 #include <OpenGL/gl.h>
-#include "image.cpp"
+
+#include <stdio.h>
+#include <memory>
+#include <vertel.h>
 
 // ----------------------------------------------------------
 // Global Variables
@@ -36,7 +39,7 @@ void display()
     // Сделаем созданную текстуру текущий, таким образом все следующие функции будут работать именно с этой текстурой
     glBindTexture(GL_TEXTURE_2D, textureID);
 
-    Image img("/Users/amdankovtsev/Downloads/hotfix.jpg");
+    Vertel::Image img("/Users/amdankovtsev/Downloads/hotfix.jpg");
 
     // Передадим изображение OpenGL
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img.width, img.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, img.bitMap);
