@@ -93,6 +93,24 @@ void specialKeys( int key, int x, int y ) {
 
 }
 
+void keyboard (unsigned char key, int x, int y){
+
+    switch (key) {
+
+        case 27: // “esc” on keyboard
+
+            exit(0);
+
+            break;
+
+        default: // “a” on keyboard
+
+            break;
+
+    }
+
+}
+
 
 int main(int argc, char* argv[]) {
     glutInit(&argc, argv);
@@ -106,6 +124,7 @@ int main(int argc, char* argv[]) {
     glutReshapeFunc(reshape);
     glutDisplayFunc(display);
     glutSpecialFunc(specialKeys);
+    glutKeyboardFunc(keyboard);
 
     glEnable(GL_TEXTURE_2D);
 
