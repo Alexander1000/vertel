@@ -4,8 +4,6 @@
 #include <GLUT/GLUT.h>  /* Для Mac OS */
 #endif
 
-// #include <stdio.h>
-// #include <memory>
 #include <OpenGL/gl.h>
 #include "image.cpp"
 
@@ -96,21 +94,14 @@ void specialKeys( int key, int x, int y ) {
 void keyboard (unsigned char key, int x, int y){
 
     switch (key) {
-
         case 27: // “esc” on keyboard
-
             exit(0);
-
             break;
 
         default: // “a” on keyboard
-
             break;
-
     }
-
 }
-
 
 int main(int argc, char* argv[]) {
     glutInit(&argc, argv);
