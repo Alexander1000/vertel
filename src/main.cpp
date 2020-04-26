@@ -4,7 +4,10 @@
 #include <GLUT/GLUT.h>  /* Для Mac OS */
 #endif
 
+// #include <stdio.h>
+// #include <memory>
 #include <OpenGL/gl.h>
+#include "image.cpp"
 
 // ----------------------------------------------------------
 // Global Variables
@@ -28,15 +31,39 @@ void display()
 {
     glClear(GL_COLOR_BUFFER_BIT);
 
+    // Создадим одну текстуру OpenGL
+    GLuint textureID;
+    glGenTextures(1, &textureID);
+
+    // Сделаем созданную текстуру текущий, таким образом все следующие функции будут работать именно с этой текстурой
+    glBindTexture(GL_TEXTURE_2D, textureID);
+
+    Image img("/Users/amdankovtsev/Downloads/hotfix.jpg");
+
+    // Передадим изображение OpenGL
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img.width, img.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, img.bitMap);
+
+    // The next commands sets the texture parameters
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // If the u,v coordinates overflow the range 0,1 the image is repeated
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // The magnification function ("linear" produces better results)
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); //The minifying function
+
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECR );
+
     glBegin(GL_QUADS);
-    glColor3f(1.0, 1.0 * (rotate_x / 100), 1.0);
-    glVertex2i(250, 450);
-    glColor3f(0.0, 0.0, 1.0);
-    glVertex2i(250, 150);
-    glColor3f(0.0, 1.0 * (rotate_y / 100), 0.0);
-    glVertex2i(550, 150);
-    glColor3f(1.0, 0.0, 0.0);
-    glVertex2i(550, 450);
+    // glColor3f(1.0, 1.0 * (rotate_x / 100), 1.0);
+    glTexCoord2f(0,1);
+    glVertex2i(50, 600);
+    // glColor3f(0.0, 0.0, 1.0);
+    glTexCoord2f(0,0);
+    glVertex2i(50, 50);
+    // glColor3f(0.0, 1.0 * (rotate_y / 100), 0.0);
+    glTexCoord2f(1,0);
+    glVertex2i(600, 50);
+    // glColor3f(1.0, 0.0, 0.0);
+    glTexCoord2f(1,1);
+    glVertex2i(600, 600);
     glEnd();
 
     glutSwapBuffers();
@@ -79,6 +106,8 @@ int main(int argc, char* argv[]) {
     glutReshapeFunc(reshape);
     glutDisplayFunc(display);
     glutSpecialFunc(specialKeys);
+
+    glEnable(GL_TEXTURE_2D);
 
     glutMainLoop();
 
