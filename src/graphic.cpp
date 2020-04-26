@@ -16,8 +16,6 @@
 double rotate_y=0;
 double rotate_x=0;
 
-// void Vertel::Graphic::reshape(int w, int h);
-
 namespace Vertel
 {
     Graphic::Graphic(int argc, char **argv)
@@ -97,12 +95,11 @@ namespace Vertel
         glutSwapBuffers();
     }
 
-// ----------------------------------------------------------
-// specialKeys() Callback Function
-// ----------------------------------------------------------
-    void Graphic::specialKeys( int key, int x, int y )
+    // ----------------------------------------------------------
+    // specialKeys() Callback Function
+    // ----------------------------------------------------------
+    void Graphic::specialKeys(int key, int x, int y)
     {
-
         //  Right arrow - increase rotation by 5 degree
         if (key == GLUT_KEY_RIGHT)
             rotate_y += 5;
@@ -119,11 +116,10 @@ namespace Vertel
 
         //  Request display update
         glutPostRedisplay();
-
     }
 
-    void Graphic::keyboard (unsigned char key, int x, int y){
-
+    void Graphic::keyboard(unsigned char key, int x, int y)
+    {
         switch (key) {
             case 27: // “esc” on keyboard
                 exit(0);
