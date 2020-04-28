@@ -11,6 +11,7 @@ include_directories(
 set(VERTEL_SHARED_SOURCES
     src/image.cpp
     src/graphic.cpp
+    src/world.cpp
 )
 
 set(VERTEL_SOURCES

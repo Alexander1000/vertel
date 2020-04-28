@@ -3,5 +3,6 @@
 
 #include <vertel/image.h>
 #include <vertel/graphic.h>
+#include <vertel/world.h>
 
 #endif
